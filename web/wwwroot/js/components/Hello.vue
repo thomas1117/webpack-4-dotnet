@@ -8,7 +8,7 @@
 	export default {
 		data() {
 			return {
-				world: 'worldo'
+				world: 'world'
 			}
 		}
 	}

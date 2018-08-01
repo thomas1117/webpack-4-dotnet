@@ -1,6 +1,6 @@
 ﻿@import "variables";
 @import "test";
-
+@import "~bootstrap/scss/bootstrap.scss";
 body {
     h2 {
         color: blue;
@@ -10,5 +10,5 @@ body {
     ::placeholder {
         color: rebeccapurple;
     }
-    background: red;
+    background: $purple;
 }

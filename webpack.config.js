@@ -30,10 +30,14 @@ module.exports = (env, argv) => {
                         loader: "babel-loader"
                     }
                 },
-                //MiniCssExtractPlugin.loader, 
                 {
                     test: /\.scss$/,
-                    use:  ['style-loader?sourceMap', MiniCssExtractPlugin.loader, 'css-loader?sourceMap', 'postcss-loader?sourceMap', 'sass-loader?sourceMap']
+                    use:  [
+                        prod ? MiniCssExtractPlugin.loader : 'style-loader?sourceMap', 
+                        'css-loader?sourceMap', 
+                        'postcss-loader?sourceMap', 
+                        'sass-loader?sourceMap'
+                    ]
                 },
                 {
                     test: /\.vue$/,
@@ -54,18 +58,19 @@ module.exports = (env, argv) => {
             extensions: ['*', '.js', '.vue'],
         },
         optimization: {},
-        plugins: [
-            new MiniCssExtractPlugin({
-                // Options similar to the same options in webpackOptions.output
-                // both options are optional
-                filename: prod ? '[name].[chunkhash].css' : "[name].css",
-                chunkFilename: "[id].css"
-            })
-        ],
+        plugins: []
+        ,
         performance: { hints: false },
     };
     
     if (prod) {
+        webpackObj.plugins.push(new MiniCssExtractPlugin({
+            // Options similar to the same options in webpackOptions.output
+            // both options are optional
+            filename: prod ? '[name].[chunkhash].css' : "[name].css",
+            chunkFilename: "[id].css"
+        }));
+        
         webpackObj.optimization = {
             splitChunks: {
                 cacheGroups: {
@@ -75,7 +80,7 @@ module.exports = (env, argv) => {
                             chunks: "initial",
                     },
                     'main': {
-                        test: __dirname + '/webpack/wwwroot/js/',
+                        test: __dirname + '/web/wwwroot/js/',
                             name: 'main',
                             chunks: "all",
                     }
