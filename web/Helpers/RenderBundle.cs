@@ -19,45 +19,45 @@ namespace web.Helpers
             {
                 JObject o = JObject.Parse(File.ReadAllText(manifestPath));
 
-                //if (o) {
-                    if (key == "css") 
-                    {
-                        var css = (o[key]);
+                if (key == "css" && o.ContainsKey("css")) 
+                {
+                    
+                    var css = o[key];
 
                     if (css.Type == JTokenType.String)
+                    {
+                        return $"<link rel='stylesheet' href='{ css }'" + "/>";   
+                    } 
+                    else 
+                    {
+                        var str = "";
+                        foreach (var style in css)
                         {
-                            return $"<link rel='stylesheet' href='{ css }'" + "/>";   
-                        } 
-                        else {
-                            var str = "";
-                            foreach (var style in css)
-                            {
-                                str += $"<link rel='stylesheet' href='{style}' />";    
-                            }
-
-                            return str;
+                            str += $"<link rel='stylesheet' href='{style}' />";    
                         }
 
+                        return str;
                     }
+                }
 
-                    if (key == "js") {
-                        var js = o[key];
-                        if (js.Type == JTokenType.String)
-                        {
-                            return $"<script src='{ js }'></script>";
-                        }
-                        else
-                        {
-                            var str = "";
-                            foreach (var script in js)
-                            {
-                                str += $"<script src='{script}'></script>";
-                            }
-
-                            return str;
-                        }
+                if (key == "js" && o.ContainsKey("js")) 
+                {
+                    var js = o[key];
+                    if (js.Type == JTokenType.String)
+                    {
+                        return $"<script src='{ js }'></script>";
                     }
-                //}
+                    else
+                    {
+                        var str = "";
+                        foreach (var script in js)
+                        {
+                            str += $"<script src='{script}'></script>";
+                        }
+
+                        return str;
+                    }
+                }
             }
 
             return "";

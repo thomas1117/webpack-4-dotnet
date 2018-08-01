@@ -5,14 +5,13 @@ module.exports = (key, value) => {
     const tracker = {};
     const keysToDelete = [];
     const keys = Object.keys(manifest);
-
     keys.forEach((src) => {
         var key = src.split('.')[1];
 
         if (!tracker[key]) {
             tracker[key] = [];
         }
-
+        
         tracker[key].push(manifest[src]);
         manifest[key] = manifest[src];
     });

@@ -17,7 +17,7 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
-    @* @Html.Raw(@Html.Bundle("css")) *@
+    @Html.Raw(@Html.Bundle("css"))
 </head>
 <body>
 <div class="container body-content">
@@ -27,7 +27,6 @@
         <p>&copy; 2018 - web</p>
     </footer>
 </div>
-@* <script src="http://localhost:8080/main.js"></script> *@
 @Html.Raw(Html.Bundle("js"))
 </body>
 </html>

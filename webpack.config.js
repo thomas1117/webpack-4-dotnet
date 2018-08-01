@@ -1,15 +1,13 @@
 const path = require('path');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
 const jsonfile = require('jsonfile');
-const PORT = 8080;
 const WebpackMd5Hash = require('webpack-md5-hash');
-
 // similiar to extract text plugin
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const PORT = 8080;
 // export as a function to pass context
 module.exports = (env, argv) => {
     let prod = argv.mode === 'production';
-
     const webpackObj = {
         entry: { main: __dirname + '/web/wwwroot/js/main.js' },
         devServer: {
@@ -35,7 +33,7 @@ module.exports = (env, argv) => {
                 //MiniCssExtractPlugin.loader, 
                 {
                     test: /\.scss$/,
-                    use:  ['style-loader?sourceMap',/**/ 'css-loader?sourceMap', 'postcss-loader?sourceMap', 'sass-loader?sourceMap']
+                    use:  ['style-loader?sourceMap', MiniCssExtractPlugin.loader, 'css-loader?sourceMap', 'postcss-loader?sourceMap', 'sass-loader?sourceMap']
                 },
                 {
                     test: /\.vue$/,
@@ -55,24 +53,36 @@ module.exports = (env, argv) => {
             },
             extensions: ['*', '.js', '.vue'],
         },
-        plugins: [],
+        optimization: {},
+        plugins: [
+            new MiniCssExtractPlugin({
+                // Options similar to the same options in webpackOptions.output
+                // both options are optional
+                filename: prod ? '[name].[chunkhash].css' : "[name].css",
+                chunkFilename: "[id].css"
+            })
+        ],
         performance: { hints: false },
     };
-
-    // const webpackObj = {
-    //     entry: { main: __dirname + '/web/wwwroot/js/main.js' },
-    //     devServer: {
-    //         host: 'localhost', // Defaults to `localhost`
-    //         port: PORT, // Defaults to 8080
-    //         hot: true,
-    //         inline: true,
-    //     },
-    //     output: {
-    //         path: path.resolve(__dirname + '/web/wwwroot', 'dist'),
-    //         filename: prod ? '[name].[chunkhash].js' : 'main.js'
-    //     },
-    //     plugins: []
-    // };
+    
+    if (prod) {
+        webpackObj.optimization = {
+            splitChunks: {
+                cacheGroups: {
+                    'vendor': {
+                        test: /[\\/]node_modules[\\/]/,
+                            name: 'vendor',
+                            chunks: "initial",
+                    },
+                    'main': {
+                        test: __dirname + '/webpack/wwwroot/js/',
+                            name: 'main',
+                            chunks: "all",
+                    }
+                }
+            }
+        }
+    } 
     
     if (!prod) {
         let file =  path.resolve(__dirname + '/web/wwwroot/dist/manifest.json');
@@ -86,6 +96,7 @@ module.exports = (env, argv) => {
             space: 2,
             writeToDisk: false,
             assets: {},
+            publicPath: '/dist/',
             replacer: require('./format'),
         }));   
     }
