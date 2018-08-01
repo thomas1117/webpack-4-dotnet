@@ -1,0 +1,14 @@
+﻿@import "variables";
+@import "test";
+
+body {
+    h2 {
+        color: blue;
+        font-size: $font-sm;
+    }
+
+    ::placeholder {
+        color: rebeccapurple;
+    }
+    background: red;
+}

@@ -1,0 +1,17 @@
+body {
+  background: red; }
+
+body {
+  background: red; }
+  body h2 {
+    color: blue;
+    font-size: 12px; }
+  body ::-webkit-input-placeholder {
+    color: rebeccapurple; }
+  body :-ms-input-placeholder {
+    color: rebeccapurple; }
+  body ::-ms-input-placeholder {
+    color: rebeccapurple; }
+  body ::placeholder {
+    color: rebeccapurple; }
+
