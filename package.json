@@ -37,7 +37,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "rimraf web/wwwroot/dist && webpack --mode=development && webpack-dev-server --mode=development --config webpack.config.js --hot --inline",
-    "build": "rimraf web/wwwroot/dist && webpack --mode=production --config webpack.config.js"
+    "build": "rimraf web/wwwroot/dist && webpack --mode=production --config webpack.config.js",
+    "play": "cd web/playground && npm run dev"
   },
   "keywords": [],
   "author": "",
