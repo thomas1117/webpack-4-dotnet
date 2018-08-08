@@ -327,3 +327,5 @@ ASALocalRun/
 
 .DS_Store
 .env
+.idea
+notes.txt

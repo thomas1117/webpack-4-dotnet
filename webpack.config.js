@@ -5,11 +5,12 @@ const WebpackMd5Hash = require('webpack-md5-hash');
 // similiar to extract text plugin
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const PORT = 8080;
+const JS_ROOT = '/web/wwwroot/js';
 // export as a function to pass context
 module.exports = (env, argv) => {
     let prod = argv.mode === 'production';
     const webpackObj = {
-        entry: { main: __dirname + '/web/wwwroot/js/main.js' },
+        entry: { main: __dirname + `${JS_ROOT}/main.js` },
         devServer: {
             host: 'localhost', // Defaults to `localhost`
             port: PORT, // Defaults to 8080
@@ -25,9 +26,23 @@ module.exports = (env, argv) => {
             rules: [
                 {
                     test: /\.js$/,
+                    enforce: 'pre',
                     exclude: /node_modules/,
                     use: {
-                        loader: "babel-loader"
+                        loader: 'eslint-loader',
+                        options: {
+                            configFile: __dirname + '/.eslintrc',
+                            failOnWarning: false,
+                            failOnError: false,
+                            emitWarning: true
+                        }
+                    }
+                },
+                {
+                    test: /\.js$/,
+                    exclude: /node_modules/,
+                    use: {
+                        loader: 'babel-loader'
                     }
                 },
                 {
@@ -58,8 +73,7 @@ module.exports = (env, argv) => {
             extensions: ['*', '.js', '.vue'],
         },
         optimization: {},
-        plugins: []
-        ,
+        plugins: [],
         performance: { hints: false },
     };
     
@@ -80,7 +94,7 @@ module.exports = (env, argv) => {
                             chunks: "initial",
                     },
                     'main': {
-                        test: __dirname + '/web/wwwroot/js/',
+                        test: __dirname + `${JS_ROOT}/`,
                             name: 'main',
                             chunks: "all",
                     }
@@ -91,7 +105,7 @@ module.exports = (env, argv) => {
     
     if (!prod) {
         let file =  path.resolve(__dirname + '/web/wwwroot/dist/manifest.json');
-        let obj = {js: "http://localhost:8080/main.js"};
+        let obj = {js: `http://localhost:${PORT}/main.js`};
         jsonfile.writeFile(file, obj, {spaces: 4}, function(err) {
             console.error(err)
         })
@@ -103,6 +117,11 @@ module.exports = (env, argv) => {
             assets: {},
             publicPath: '/dist/',
             replacer: require('./format'),
+            sortManifest(a, b) {
+                if (a > b) return -1;
+                if (a < b) return 1;
+                return 0;
+              }
         }));   
     }
 

@@ -25,15 +25,5 @@ module.exports = (key, value) => {
         }
     }
 
-    // a hack to sort the vendor
-    if (key === "js" && manifest[key].length >= 2) {
-        manifest[key].forEach((item, index) => {
-            if (item.includes('vendor')) {
-                manifest[key].splice(index, 1);
-                manifest[key].unshift(item);
-            }
-        });
-    }
-
     return manifest;
 };
