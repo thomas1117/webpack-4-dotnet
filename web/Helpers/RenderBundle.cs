@@ -4,6 +4,7 @@ using System;
 using Newtonsoft.Json.Linq;
 using System.IO;
 using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting;
 
 namespace web.Helpers
 {
@@ -13,7 +14,7 @@ namespace web.Helpers
             //=> new HtmlString("<strong>Hello World</strong>");
 
         public static String Bundle(this IHtmlHelper htmlHelper, string key) {
-            var manifestPath = "/Users/thomasshannon/Desktop/web/web/wwwroot/dist/manifest.json";
+            var manifestPath = "wwwroot/dist/manifest.json";
             var fileExists = File.Exists(manifestPath);
             if (fileExists)
             {

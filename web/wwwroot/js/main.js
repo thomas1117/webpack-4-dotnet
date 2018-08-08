@@ -8,6 +8,6 @@ const app = new Vue({
         hello: 'world',
     },
     components: {
-        Hello
+        Hello,
     },
 });

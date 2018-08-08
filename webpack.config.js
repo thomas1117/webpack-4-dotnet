@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack= require('webpack');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
 const jsonfile = require('jsonfile');
 const WebpackMd5Hash = require('webpack-md5-hash');
@@ -58,8 +59,11 @@ module.exports = (env, argv) => {
                     test: /\.vue$/,
                     exclude: /node_modules/,
                     use: {
-                        loader: 'vue-loader'
-                    }
+                        loader: 'vue-loader',
+                        options: {
+                            // extractCSS: true
+                        }
+                    },
                 },
             ]
         },
@@ -87,17 +91,25 @@ module.exports = (env, argv) => {
         
         webpackObj.optimization = {
             splitChunks: {
+                // chunks: "initial",
                 cacheGroups: {
                     'vendor': {
                         test: /[\\/]node_modules[\\/]/,
-                            name: 'vendor',
-                            chunks: "initial",
+                        name: 'vendor',
+                        chunks: 'initial',
                     },
                     'main': {
                         test: __dirname + `${JS_ROOT}/`,
-                            name: 'main',
-                            chunks: "all",
-                    }
+                        name: 'main',
+                        chunks: 'all',
+                    },
+                    // 'styles': {
+                    //     name: 'app',
+                    //     test: /\.(s?css)$/, // chunks plugin has to be aware of all kind of files able to output css in order to put them together
+                    //     chunks: 'initial',
+                    //     minChunks: 1,
+                    //     enforce: true
+                    // }
                 }
             }
         }
